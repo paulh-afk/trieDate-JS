@@ -36,7 +36,7 @@ const datas = [
   },
 ];
 
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById('articles');
 
 const trieArticleDate = (datas) => {
   let result = [...datas];
@@ -55,29 +55,34 @@ const trieArticleDate = (datas) => {
 const articleMap = () => {
   const articles = trieArticleDate(datas);
   const articlesElements = articles.map((article) => {
-    const element = document.createElement('div');
+    const element = document.createElement('article');
+
+    const h3 = document.createElement('h3');
+    h3.innerText = article.author;
 
     const ulElement = document.createElement('ul');
     const liElements = article.categories.map((categorie) => {
       const li = document.createElement('li');
-      li.innerHTML = categorie;
+      li.innerText = categorie;
       return li;
     });
     ulElement.append(...liElements);
 
-    element.innerHTML = `
-      <h3>${article.author}</h3>
-      ${ulElement.innerHTML}
-      <h5>${new Date(article.date).toLocaleDateString('fr-FR', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      })}</h5>
-      <p>${article.content}</p>
-    `;
+    const h5 = document.createElement('h5');
+    h5.innerText = new Date(article.date).toLocaleDateString('fr-FR', {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    const p = document.createElement('p');
+    p.innerText = article.content;
+
+    element.append(...[h3, ulElement, h5, p]);
+
     return element;
   });
   rootElement.append(...articlesElements);
